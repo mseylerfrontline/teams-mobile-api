@@ -4,11 +4,16 @@ path = require 'path'
 url = require 'url'
 fs = require 'fs'
 
-config = require './config/config.coffee' #Get config data (environment-specific)
+# Get config data (environment-specific)
+config = require './config/config'
+
+# Import our controllers
+districts = require './controllers/districts'
+users = require './controllers/users'
+auth = require './controllers/auth'
 
 # Set up mongodb
 mongoose = require 'mongoose'
-DistrictModel = require './districtModel.coffee'
 db = mongoose.connection
 mongoose.connect config.mongoURL
 
@@ -30,62 +35,13 @@ app.all '*', (req, res, next) ->
 
 # Set parent middleware URL (all URLs descend form /mobile/v1)
 v1 = express.Router()
-app.use('/mobile/v1', v1)
+app.use '/mobile/v1', v1
 
-# Client asks for list of districts
-v1.get '/districts', (req,res) ->
+v1.route '/districts'
+	.get(auth.isAuthenticated, districts.getDistricts)
+	.put(auth.isAuthenticated, districts.putDistrict)
 
-	if req.query.longitude and req.query.latitude # If we have both longitude and latitude parameters
-
-		geoJSONpoint = # Set up our GeoJSON data object
-			type: 'Point'
-			coordinates: [
-				req.query.longitude,
-				req.query.latitude
-			]
-
-		# Find districts with TEAMS in the given location, only get their name, altName, and URLs
-		DistrictModel.find { teams: true, loc: { $near: { $geometry: geoJSONpoint, $maxDistance: 1000 } } }, "name altName accounts", (err, data) ->
-			if err
-				res.status(500).send({msg: 'An unexpected error occured.'})
-			else
-				res.send {
-					pageInfo: {
-						totalResults: data.length,
-						resultsPerPage: data.length
-					},
-					items: data
-				} #Standard 200 response with JSON object
-
-	else if req.query.name #If we have just the district's full name (not alt)
-
-		DistrictModel.find { teams: true, name: req.query.name }, "name altName accounts", (err, data) ->
-			if err
-				res.status(500).send({msg: 'An unexpected error occured.'})
-			else
-				res.send {
-					pageInfo: {
-						totalResults: data.length,
-						resultsPerPage: data.length
-					},
-					items: data
-				}
-
-	else #No paramters, get all the districts with teams
-
-		DistrictModel.find { teams: true }, "name altName accounts", { sort: { name: 1 } }, (err, data) ->
-			if err
-				res.status(500).send({msg: 'An unexpected error occured.'})
-			else
-				res.send {
-					pageInfo: {
-						totalResults: data.length,
-						resultsPerPage: data.length
-					},
-					items: data
-				} # Implied 200 status and connection end
-
-v1.put '/districts/', (req,res) ->
-	return
+v1.route '/users'
+	.post(auth.isAuthenticated, users.postUser)
 
 app.listen config.port, config.ip
