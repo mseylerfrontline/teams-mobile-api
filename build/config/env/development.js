@@ -1,0 +1,14 @@
+(function() {
+  var development;
+
+  development = {
+    mongoURL: 'mongodb://localhost:27017/teams',
+    port: 7500,
+    ip: '127.0.0.1'
+  };
+
+  module.exports = development;
+
+}).call(this);
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbmZpZy9lbnYvZGV2ZWxvcG1lbnQuY29mZmVlIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUVBO0FBQUEsTUFBQTs7RUFBQSxXQUFBLEdBQ0c7SUFBQSxRQUFBLEVBQVUsaUNBQVY7SUFDQSxJQUFBLEVBQU0sSUFETjtJQUVBLEVBQUEsRUFBSSxXQUZKOzs7RUFJSCxNQUFNLENBQUMsT0FBUCxHQUFpQjtBQUxqQiIsImZpbGUiOiJjb25maWcvZW52L2RldmVsb3BtZW50LmpzIiwic291cmNlUm9vdCI6Ii9zb3VyY2UvIiwic291cmNlc0NvbnRlbnQiOlsiIyBEZXZlbG9wbWVudCBlbnZpcm9ubWVudC1zcGVjaWZpYyBjb25maWd1cmF0aW9uXG5cbmRldmVsb3BtZW50ID1cbiAgIG1vbmdvVVJMOiAnbW9uZ29kYjovL2xvY2FsaG9zdDoyNzAxNy90ZWFtcydcbiAgIHBvcnQ6IDc1MDBcbiAgIGlwOiAnMTI3LjAuMC4xJ1xuXG5tb2R1bGUuZXhwb3J0cyA9IGRldmVsb3BtZW50XG4iXX0=

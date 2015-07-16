@@ -21,15 +21,15 @@ exports.postUser = (req,res) ->
 
    # Making sure we have valid parameters
    if !req.body.name
-      Errors.missingParam(res, "user", "name")
+      Errors.missingBody(res, "user", "name")
       return
 
    else if !req.body.type
-      Errors.missingParam(res, "user", "type")
+      Errors.missingBody(res, "user", "type")
       return
 
    else if !scope
-      Errors.invalidParam(res, "user", "type", req.query.type)
+      Errors.invalidBody(res, "user", "type", req.query.type)
       return
 
    # No errors

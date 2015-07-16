@@ -1,7 +1,15 @@
 ###
+   /controllers
+   Handles JSON responses to API request errors
+###
+
+
+###
+   4xx
    Failed Errors (client error)
 ###
 
+# If the client missed a required parameter
 exports.missingParam = (res, domain, param) ->
    res.status(400).send {
       status: "failed"
@@ -17,6 +25,7 @@ exports.missingParam = (res, domain, param) ->
       ]
    }
 
+# If the client gave an invalid parameter value
 exports.invalidParam = (res, domain, param, input) ->
    res.status(400).send {
       status: "failed"
@@ -32,6 +41,39 @@ exports.invalidParam = (res, domain, param, input) ->
       ]
    }
 
+# If the client misses a necessary part of the JSON body
+exports.missingBody = (res, domain, key) ->
+   res.status(400).send {
+      status: "failed"
+      errors: [
+         {
+            status: "400"
+            domain: domain
+            reason: "required"
+            message: "Required body key: #{key}"
+            locationType: "body"
+            location: key
+         }
+      ]
+   }
+
+# If the client has an invalid value for a necessary part of the JSON body
+exports.invalidBody = (req, domain, key, input) ->
+   res.status(400).send {
+      status: "failed"
+      errors: [
+         {
+            status: "400"
+            domain: domain
+            reason: "invalid"
+            message: "Invalid '#{key} value': #{input}"
+            locationType: "body"
+            location: key
+         }
+      ]
+   }
+
+# If the client does not have a correct key / secret combination
 exports.failedAuth = (res, domain) ->
    res.status(403).send {
       status: "failed"
@@ -45,6 +87,7 @@ exports.failedAuth = (res, domain) ->
       ]
    }
 
+# If the client is missing a necessary scope for a request
 exports.needPermission = (res, domain) ->
    res.status(403).send {
       status: "failed"
@@ -59,9 +102,11 @@ exports.needPermission = (res, domain) ->
    }
 
 ###
+   5xx
    Internal Errors (server error)
 ###
 
+# Mongo threw an error when saving
 exports.internalSave = (res, domain) ->
    res.status(500).send {
       status: "error"
@@ -75,6 +120,7 @@ exports.internalSave = (res, domain) ->
       ]
    }
 
+# Mongo threw an error when finding
 exports.internalFind = (res, domain) ->
    res.status(500).send {
       status: "error"

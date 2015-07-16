@@ -1,6 +1,13 @@
+###
+   /controllers
+   Handles requests to the /districts API endpoint
+###
+
+# Import our dependencies
 Districts = require '../models/districts'
 Errors = require './errors'
 
+# Called on GET request
 exports.getDistricts = (req,res) ->
 
    if req.query.longitude and req.query.latitude # If we have both longitude and latitude parameters
@@ -45,7 +52,7 @@ exports.getDistricts = (req,res) ->
                }
             }
 
-   else #No paramters, get all the districts with teams
+   else # No paramters, get all the districts with teams
 
       Districts.find { teams: true }, "name altName accounts", { sort: { name: 1 } }, (err, data) ->
          if err
