@@ -58,7 +58,23 @@ exports.missingBody = (res, domain, key) ->
    }
 
 # If the client has an invalid value for a necessary part of the JSON body
-exports.invalidBody = (req, domain, key, input) ->
+exports.duplicateBody = (res, domain, key) ->
+   res.status(400).send {
+      status: "failed"
+      errors: [
+         {
+            status: "400"
+            domain: domain
+            reason: "duplicate"
+            message: "Invalid #{key} value: #{key} is not unique"
+            locationType: "body"
+            location: key
+         }
+      ]
+   }
+
+# If the client has entered a value that is unique and already present
+exports.duplicate = (res, domain, key, input) ->
    res.status(400).send {
       status: "failed"
       errors: [
@@ -106,7 +122,7 @@ exports.needPermission = (res, domain) ->
    Internal Errors (server error)
 ###
 
-# Mongo threw an error when saving
+# Mongo threw an error when saving (POST)
 exports.internalSave = (res, domain) ->
    res.status(500).send {
       status: "error"
@@ -120,7 +136,7 @@ exports.internalSave = (res, domain) ->
       ]
    }
 
-# Mongo threw an error when finding
+# Mongo threw an error when finding (GET)
 exports.internalFind = (res, domain) ->
    res.status(500).send {
       status: "error"
@@ -134,6 +150,33 @@ exports.internalFind = (res, domain) ->
       ]
    }
 
+# Mongo threw an error when putting (PUT)
+exports.internalPut = (res, domain) ->
+   res.status(500).send {
+      status: "error"
+      errors: [
+         {
+            status: "500"
+            domain: domain
+            reason: "unknown"
+            message: "Couldn't put #{domain}"
+         }
+      ]
+   }
+
+# Mongo threw an error when removing (DELETE)
+exports.internalRemove = (res, domain) ->
+   res.status(500).send {
+      status: "error"
+      errors: [
+         {
+            status: "500"
+            domain: domain
+            reason: "unknown"
+            message: "Couldn't remove #{domain}"
+         }
+      ]
+   }
 
 
 String::capitalizeFirstLetter = ->

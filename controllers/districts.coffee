@@ -4,7 +4,7 @@
 ###
 
 # Import our dependencies
-Districts = require '../models/districts'
+District = require '../models/districts'
 Errors = require './errors'
 
 # Called on GET request
@@ -20,7 +20,8 @@ exports.getDistricts = (req,res) ->
          ]
 
       # Find districts with TEAMS in the given location, only get their name, altName, and URLs
-      Districts.find { teams: true, loc: { $near: { $geometry: geoJSONpoint, $maxDistance: 1000 } } }, "name altName accounts", (err, data) ->
+      District.find { teams: true, loc: { $near: { $geometry: geoJSONpoint, $maxDistance: 1000 } } }, "name altName accounts", (err, data) ->
+         console.log data
          if err
             Errors.internalFind(res, "district")
          else
@@ -37,7 +38,7 @@ exports.getDistricts = (req,res) ->
 
    else if req.query.name #If we have just the district's full name (not alt)
 
-      Districts.find { teams: true, name: req.query.name }, "name altName accounts", (err, data) ->
+      District.find { teams: true, name: req.query.name }, "name altName accounts", (err, data) ->
          if err
             Errors.internalFind(res, "district")
          else
@@ -54,7 +55,7 @@ exports.getDistricts = (req,res) ->
 
    else # No paramters, get all the districts with teams
 
-      Districts.find { teams: true }, "name altName accounts", { sort: { name: 1 } }, (err, data) ->
+      District.find { teams: true }, "name altName accounts", { sort: { name: 1 } }, (err, data) ->
          if err
             Errors.internalFind(res, "district")
          else

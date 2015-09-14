@@ -9,6 +9,7 @@ config = require './config/config'
 
 # Import our controllers
 districts = require './controllers/districts'
+devices = require './controllers/devices'
 users = require './controllers/users'
 auth = require './controllers/auth'
 
@@ -40,6 +41,15 @@ app.use '/mobile/v1', v1
 v1.route '/districts'
 	.get(auth.isAuthenticated, districts.getDistricts)
 	.put(auth.isAuthenticated, districts.putDistrict)
+
+v1.route '/devices'
+	.get(auth.isAuthenticated, devices.getDevices)
+	.post(auth.isAuthenticated, devices.postDevice)
+
+v1.route '/devices/:device_id'
+	.get(auth.isAuthenticated, devices.getDevice)
+	.put(auth.isAuthenticated, devices.putDevice)
+	.delete(auth.isAuthenticated, devices.deleteDevice)
 
 v1.route '/users'
 	.post(auth.isAuthenticated, users.postUser)

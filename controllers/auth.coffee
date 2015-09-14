@@ -39,7 +39,6 @@ exports.isAuthenticated = (req, res, next) ->
             return
 
          else
-
             switch req.route.path
 
                # Scopes required if request is made to /districts endpoint
@@ -49,6 +48,14 @@ exports.isAuthenticated = (req, res, next) ->
                         checkPermission("read:districts", user.scope)
                      when "PUT"
                         checkPermission("write:districts", user.scope)
+
+               # Scopes required if request is made to /devices endpoint
+               when "/devices" or "/devices/:device_id"
+                  switch req.method # Different scope depending on request method
+                     when "GET"
+                        checkPermission("read:districts", user.scope)
+                     when "POST" or "PUT" or "DELETE"
+                        checkPermission("write:users", user.scope)
 
                # Scopes required if request is made to /users endpoint
                when "/users"
