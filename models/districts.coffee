@@ -13,8 +13,15 @@ districtSchema = new mongoose.Schema {
 				{
 					name: String
 					icon: String
-					url: String
 					enabled: Boolean
+					url:
+						web: String
+						android:
+							app: String
+							fallback: String
+						ios:
+							app: String
+							fallback: String
 				}
 			]
 		}

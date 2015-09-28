@@ -20,8 +20,7 @@ exports.getDistricts = (req,res) ->
          ]
 
       # Find districts with TEAMS in the given location, only get their name, altName, and URLs
-      District.find { teams: true, loc: { $near: { $geometry: geoJSONpoint, $maxDistance: 1000 } } }, "name altName accounts", (err, data) ->
-         console.log data
+      District.find { teams: true, loc: { $near: { $geometry: geoJSONpoint, $maxDistance: 1000 } } }, "name altName id", (err, data) ->
          if err
             Errors.internalFind(res, "district")
          else
@@ -38,7 +37,7 @@ exports.getDistricts = (req,res) ->
 
    else if req.query.name #If we have just the district's full name (not alt)
 
-      District.find { teams: true, name: req.query.name }, "name altName accounts", (err, data) ->
+      District.find { teams: true, name: req.query.name }, "name altName id", (err, data) ->
          if err
             Errors.internalFind(res, "district")
          else
@@ -55,7 +54,7 @@ exports.getDistricts = (req,res) ->
 
    else # No paramters, get all the districts with teams
 
-      District.find { teams: true }, "name altName accounts", { sort: { name: 1 } }, (err, data) ->
+      District.find { teams: true }, "name altName id", { sort: { name: 1 } }, (err, data) ->
          if err
             Errors.internalFind(res, "district")
          else
@@ -71,6 +70,17 @@ exports.getDistricts = (req,res) ->
             }
 
 exports.getDistrict = (req,res) ->
+   District.findOne {id: req.params.district_id}, {_id: 0, teams: 0, loc: 0, _v: 0}, (err, data) ->
+      if err
+         Errors.internalFind(res, "district")
+      else
+         res.send {
+            status: "success"
+            data: {
+               district: data
+            }
+         }
+
    return
 
 exports.putDistrict = (req,res) ->

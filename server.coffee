@@ -42,6 +42,9 @@ v1.route '/districts'
 	.get(auth.isAuthenticated, districts.getDistricts)
 	.put(auth.isAuthenticated, districts.putDistrict)
 
+v1.route '/districts/:district_id'
+	.get(auth.isAuthenticated, districts.getDistrict)
+
 v1.route '/devices'
 	.get(auth.isAuthenticated, devices.getDevices)
 	.post(auth.isAuthenticated, devices.postDevice)
