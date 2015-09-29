@@ -20,7 +20,7 @@ exports.getDistricts = (req,res) ->
          ]
 
       # Find districts with TEAMS in the given location, only get their name, altName, and URLs
-      District.find { teams: true, loc: { $near: { $geometry: geoJSONpoint, $maxDistance: 1000 } } }, "name altName id", (err, data) ->
+      District.find { teams: true, loc: { $near: { $geometry: geoJSONpoint, $maxDistance: 1000 } } }, "name altName id accounts", (err, data) ->
          if err
             Errors.internalFind(res, "district")
          else
@@ -37,7 +37,7 @@ exports.getDistricts = (req,res) ->
 
    else if req.query.name #If we have just the district's full name (not alt)
 
-      District.find { teams: true, name: req.query.name }, "name altName id", (err, data) ->
+      District.find { teams: true, name: req.query.name }, "name altName id accounts", (err, data) ->
          if err
             Errors.internalFind(res, "district")
          else
@@ -54,7 +54,7 @@ exports.getDistricts = (req,res) ->
 
    else # No paramters, get all the districts with teams
 
-      District.find { teams: true }, "name altName id", { sort: { name: 1 } }, (err, data) ->
+      District.find { teams: true }, "name altName id accounts", { sort: { name: 1 } }, (err, data) ->
          if err
             Errors.internalFind(res, "district")
          else
