@@ -8,6 +8,7 @@ districtSchema = new mongoose.Schema {
 	num: String
 
 	accounts:
+
 		parent:
 			url: String
 			pages: [
@@ -25,6 +26,7 @@ districtSchema = new mongoose.Schema {
 							fallback: String
 				}
 			]
+
 		student:
 			url: String
 			pages: [
@@ -42,6 +44,7 @@ districtSchema = new mongoose.Schema {
 							fallback: String
 				}
 			]
+
 		substitute:
 			url: String
 			pages: [
@@ -59,6 +62,7 @@ districtSchema = new mongoose.Schema {
 							fallback: String
 				}
 			]
+
 		principal:
 			url: String
 			pages: [
@@ -77,6 +81,24 @@ districtSchema = new mongoose.Schema {
 				}
 			]
 		employee:
+			url: String
+			pages: [
+				{
+					name: String
+					icon: String
+					enabled: Boolean
+					url:
+						web: String
+						android:
+							app: String
+							fallback: String
+						ios:
+							app: String
+							fallback: String
+				}
+			]
+
+		teacher:
 			url: String
 			pages: [
 				{
